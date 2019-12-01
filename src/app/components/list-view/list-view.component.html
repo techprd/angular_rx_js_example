@@ -1,0 +1,16 @@
+<div cdkTrapFocus [cdkTrapFocusAutoCapture]="false">
+  <mat-form-field appearance="outline" style="width: 80%;">
+    <input
+      matInput
+      placeholder="Search for..."
+      ngModel (ngModelChange)="bloc.query.next($event)">
+  </mat-form-field>
+</div>
+
+<span> {{ bloc.preamble | async }} </span>
+
+<ul>
+  <li *ngFor="let result of bloc.results | async">
+    {{ result }}
+  </li>
+</ul>
