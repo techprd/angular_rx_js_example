@@ -1,5 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {SearchRepository} from '../../repositories/SearchRepository';
+import {Component, OnInit} from '@angular/core';
 import {SearchBloc} from '../../bloc/SearchBloc';
 
 @Component({
@@ -7,17 +6,12 @@ import {SearchBloc} from '../../bloc/SearchBloc';
   templateUrl: './list-view.component.html',
   styleUrls: ['./list-view.component.scss']
 })
-export class ListViewComponent implements OnInit, OnDestroy {
-  bloc: SearchBloc;
+export class ListViewComponent implements OnInit {
 
-  constructor(private repository: SearchRepository) {
-    this.bloc = new SearchBloc(this.repository);
+  constructor(private bloc: SearchBloc) {
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
   }
 
-  ngOnDestroy() {
-    this.bloc.dispose();
-  }
 }

@@ -1,18 +1,18 @@
-<h1>Angular + Bloc Example</h1>
+<h1>Angular + Bloc + Rx Example</h1>
 <p>Enter a search term:</p>
 <div cdkTrapFocus [cdkTrapFocusAutoCapture]="false">
   <mat-form-field appearance="outline" style="width: 80%;">
     <input
       matInput
       placeholder="Search for..."
-      ngModel (ngModelChange)="bloc.executeSearch($event)">
+      ngModel (ngModelChange)="bloc.query.next($event)">
   </mat-form-field>
 </div>
 
-<span> {{ bloc.preamble }} </span>
+<span> {{ bloc.preamble | async }} </span>
 
 <ul>
-  <li *ngFor="let result of bloc.results">
+  <li *ngFor="let result of bloc.results | async">
     {{ result }}
   </li>
 </ul>

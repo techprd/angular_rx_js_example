@@ -1,0 +1,22 @@
+<h1>Angular + Bloc + State Example</h1>
+<div cdkTrapFocus [cdkTrapFocusAutoCapture]="false">
+  <p>
+    <mat-label>Enter a search term:</mat-label>
+    <mat-form-field appearance="outline" style="width: 80%;">
+      <input
+        matInput
+        placeholder="Search for..."
+        ngModel (ngModelChange)="bloc.query.next($event)">
+      <mat-spinner *ngIf="bloc.isLoading | async" matSuffix [diameter]="18"
+                   style="float: right; margin-left: 8px"></mat-spinner>
+    </mat-form-field>
+  </p>
+</div>
+
+<span> {{ bloc.preamble | async }} </span>
+
+<ul>
+  <li *ngFor="let result of bloc.results | async">
+    {{ result }}
+  </li>
+</ul>

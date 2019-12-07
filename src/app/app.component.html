@@ -10,13 +10,13 @@
 </div>
 
 <div class="content" role="main">
-
+  <mat-toolbar>
+    <span> <button mat-button routerLink="/">Home</button></span>
+    <span> <button mat-button routerLink="/rx">Rx</button></span>
+    <span> <button mat-button routerLink="/state">State</button></span>
+  </mat-toolbar>
   <!-- Resources -->
-  <h2>{{ title }}</h2>
-  <p>{{subTitle}}</p>
-
-  <app-list-view></app-list-view>
-
+  <router-outlet></router-outlet>
   <!-- Footer -->
   <footer>
   </footer>
@@ -29,4 +29,4 @@
   </svg>
 
 </div>
-<router-outlet></router-outlet>
+

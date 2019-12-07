@@ -1,20 +1,18 @@
-import { Injectable } from '@angular/core';
-import { of as observableOf } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
 import * as faker from 'faker';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class SearchRepository {
 
   async search(query: string) {
     if (query == null || query.length === 0) {
-      return await [];
+      return [];
     }
-    const results = new Array(10).fill(query).map(() => faker.name.findName());
+    const results = new Array(10).fill(query).map(() => faker.name.findName(query));
     return new Promise<string[]>(resolve => {
       setTimeout(() => {
         resolve(results);
-      }, 300);
+      }, 500);
     });
   }
 }
