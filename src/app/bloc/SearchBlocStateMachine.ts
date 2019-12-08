@@ -1,13 +1,13 @@
 import {SearchRepository} from '../repositories/SearchRepository';
-import {BehaviorSubject, from, Observable, Observer, Subject} from 'rxjs';
-import {map, switchMap, withLatestFrom} from 'rxjs/operators';
+import {Observable, Observer, Subject} from 'rxjs';
+import {debounceTime, withLatestFrom} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SearchBlocStateMachine {
-  private readonly results$ = new BehaviorSubject<string[]>([]);
+  private readonly results$ = new Subject<string[]>();
 
   get results(): Observable<string[]> {
     return this.results$;
@@ -19,7 +19,7 @@ export class SearchBlocStateMachine {
     return this.preamble$;
   }
 
-  private query$ = new BehaviorSubject<string>('');
+  private query$ = new Subject<string>();
 
   get query(): Observer<string> {
     return this.query$;
@@ -33,6 +33,7 @@ export class SearchBlocStateMachine {
 
   constructor(private repository: SearchRepository) {
     this.query$.subscribe((q) => this.performNameSearch(q));
+    // this.query$.pipe(debounceTime(300)).subscribe((q) => this.performNameSearch(q));
     this.preamble$ = this.results$.pipe(
       withLatestFrom(this.query$, (_, q) => q ? `Results for ${q}` : '')
     );
@@ -40,19 +41,23 @@ export class SearchBlocStateMachine {
 
   async performNameSearch(query: string) {
     for await (const state of this.getState(query)) {
-      console.log(state);
+
       if (state instanceof SearchInitial) {
         console.log('init...');
         this.results$.next(state.data);
         this.isLoading$.next(false);
-      }
-      if (state instanceof SearchLoading) {
+
+      } else if (state instanceof SearchLoading) {
         console.log('searching...');
         this.isLoading$.next(true);
-      }
-      if (state instanceof SearchResult) {
+
+      } else if (state instanceof SearchResult) {
+        console.log('got results...');
         this.results$.next(state.data);
         this.isLoading$.next(false);
+
+      } else if (state instanceof SearchError) {
+        console.error('an error occurred...');
       }
     }
   }
@@ -73,6 +78,7 @@ export class SearchBlocStateMachine {
 
   dispose() {
     this.query$.complete();
+    this.isLoading$.complete();
   }
 }
 
