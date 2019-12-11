@@ -32,8 +32,7 @@ export class SearchBlocStateMachine {
   }
 
   constructor(private repository: SearchRepository) {
-    this.query$.subscribe((q) => this.performNameSearch(q));
-    // this.query$.pipe(debounceTime(300)).subscribe((q) => this.performNameSearch(q));
+    this.query$.pipe(debounceTime(300)).subscribe((q) => this.performNameSearch(q));
     this.preamble$ = this.results$.pipe(
       withLatestFrom(this.query$, (_, q) => q ? `Results for ${q}` : '')
     );
