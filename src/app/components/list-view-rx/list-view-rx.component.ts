@@ -14,7 +14,7 @@ export class ListViewRxComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.bloc.dispose();
   }
 }

@@ -1,6 +1,6 @@
 import {SearchRepository} from '../repositories/SearchRepository';
 import {BehaviorSubject, Observable, Observer} from 'rxjs';
-import {delay, switchMap, withLatestFrom} from 'rxjs/operators';
+import {debounceTime, delay, switchMap, withLatestFrom} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 
 @Injectable({
@@ -26,9 +26,9 @@ export class SearchBlocRx {
   }
 
   constructor(private repository: SearchRepository) {
-
     this.results$ = this.query$
       .pipe(
+        debounceTime(300),
         switchMap((query) => this.repository.search(query)),
       );
 
@@ -38,6 +38,5 @@ export class SearchBlocRx {
   }
 
   dispose() {
-    this.query$.complete();
   }
 }

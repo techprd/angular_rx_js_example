@@ -1,5 +1,5 @@
 import {SearchRepository} from '../repositories/SearchRepository';
-import {Observable, Observer, Subject} from 'rxjs';
+import {BehaviorSubject, Observable, Observer, Subject} from 'rxjs';
 import {debounceTime, withLatestFrom} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 
@@ -7,7 +7,7 @@ import {Injectable} from '@angular/core';
   providedIn: 'root',
 })
 export class SearchBlocStateMachine {
-  private readonly results$ = new Subject<string[]>();
+  private readonly results$ = new BehaviorSubject<string[]>([]);
 
   get results(): Observable<string[]> {
     return this.results$;
@@ -19,7 +19,7 @@ export class SearchBlocStateMachine {
     return this.preamble$;
   }
 
-  private query$ = new Subject<string>();
+  private query$ = new BehaviorSubject<string>('');
 
   get query(): Observer<string> {
     return this.query$;
@@ -76,8 +76,7 @@ export class SearchBlocStateMachine {
   }
 
   dispose() {
-    this.query$.complete();
-    this.isLoading$.complete();
+    console.log('dispose');
   }
 }
 
